@@ -14,9 +14,9 @@ Install the package with NPM and add it to your devDependencies:
 ###Usage:
 
 ```javascript
-var JavaScriptObfuscator = require('javascript-obfuscator');
+var jsObfs = require('javascript-obfuscator');
 
-var obfuscatedCode = JavaScriptObfuscator.obfuscate(
+var obfuscatedCode = jsObfs.JavaScriptObfuscator.obfuscate(
     `
     (function(){
         var variable = 'abc';
