@@ -72,7 +72,7 @@ class Obfuscator {
             return;
         }
         this.nodeObfuscators.get(node.type).forEach((obfuscator) => {
-            new obfuscator(this.nodes).obfuscateNode(node, parentNode);
+            (new obfuscator(this.nodes)).obfuscateNode(node, parentNode);
         });
     }
     obfuscate(node) {
