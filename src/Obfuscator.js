@@ -2,6 +2,7 @@
 const estraverse = require('estraverse');
 const AppendState_1 = require('./enums/AppendState');
 const NodeType_1 = require('./enums/NodeType');
+const CallExpressionObfuscator_1 = require('./node-obfuscators/CallExpressionObfuscator');
 const CatchClauseObfuscator_1 = require('./node-obfuscators/CatchClauseObfuscator');
 const ConsoleOutputDisableExpressionNode_1 = require('./custom-nodes/console-output-nodes/ConsoleOutputDisableExpressionNode');
 const DebugProtectionNodesGroup_1 = require('./node-groups/DebugProtectionNodesGroup');
@@ -21,6 +22,7 @@ class Obfuscator {
         this.nodes = new Map();
         this.nodeObfuscators = new Map([
             [NodeType_1.NodeType.ArrowFunctionExpression, [FunctionObfuscator_1.FunctionObfuscator]],
+            [NodeType_1.NodeType.CallExpression, [CallExpressionObfuscator_1.CallExpressionObfuscator]],
             [NodeType_1.NodeType.ClassDeclaration, [FunctionDeclarationObfuscator_1.FunctionDeclarationObfuscator]],
             [NodeType_1.NodeType.CatchClause, [CatchClauseObfuscator_1.CatchClauseObfuscator]],
             [NodeType_1.NodeType.FunctionDeclaration, [
@@ -67,6 +69,16 @@ class Obfuscator {
         });
     }
     ;
+    initializeNodeEnter(node, parentNode) {
+        if (!this.nodeObfuscators.has(node.type)) {
+            return;
+        }
+        let result = null;
+        this.nodeObfuscators.get(node.type).forEach((obfuscator) => {
+            result = result || (new obfuscator(this.nodes, this.options)).enterNode(node, parentNode);
+        });
+        return result;
+    }
     initializeNodeObfuscators(node, parentNode) {
         if (!this.nodeObfuscators.has(node.type)) {
             return;
@@ -77,6 +89,9 @@ class Obfuscator {
     }
     obfuscate(node) {
         estraverse.replace(node, {
+            enter: (node, parentNode) => {
+                return this.initializeNodeEnter(node, parentNode);
+            },
             leave: (node, parentNode) => {
                 this.initializeNodeObfuscators(node, parentNode);
             }

@@ -8,6 +8,7 @@ import { INode } from './interfaces/nodes/INode';
 import { AppendState } from './enums/AppendState';
 import { NodeType } from './enums/NodeType';
 
+import { CallExpressionObfuscator } from './node-obfuscators/CallExpressionObfuscator';
 import { CatchClauseObfuscator } from './node-obfuscators/CatchClauseObfuscator';
 import { ConsoleOutputDisableExpressionNode } from './custom-nodes/console-output-nodes/ConsoleOutputDisableExpressionNode';
 import { DebugProtectionNodesGroup } from './node-groups/DebugProtectionNodesGroup';
@@ -34,6 +35,7 @@ export class Obfuscator {
      */
     private nodeObfuscators: Map <string, (new(nodes: Map <string, ICustomNode>, options: any)=>INodeObfuscator)[]> = new Map <string, (new(nodes: Map <string, ICustomNode>, options: any)=>INodeObfuscator)[]> ([
         [NodeType.ArrowFunctionExpression, [FunctionObfuscator]],
+	[NodeType.CallExpression, [CallExpressionObfuscator]],
         [NodeType.ClassDeclaration, [FunctionDeclarationObfuscator]],
         [NodeType.CatchClause, [CatchClauseObfuscator]],
         [NodeType.FunctionDeclaration, [
@@ -114,6 +116,21 @@ export class Obfuscator {
         });
     };
 
+    /**
+     * @param node
+     * @param parentNode
+     */
+    private initializeNodeEnter (node: INode, parentNode: INode): any {
+        if (!this.nodeObfuscators.has(node.type)) {
+            return;
+        }
+        
+	let result = null;
+        this.nodeObfuscators.get(node.type).forEach((obfuscator : new(nodes: Map <string, ICustomNode>, options: any)=>INodeObfuscator) => {
+            result = result || (new obfuscator(this.nodes, this.options)).enterNode(node, parentNode);
+        });
+	return result;
+    }
 
     /**
      * @param node
@@ -134,6 +151,9 @@ export class Obfuscator {
      */
     private obfuscate (node: INode): void {
         estraverse.replace(node, {
+	    enter: (node: INode, parentNode: INode): any => {
+		return this.initializeNodeEnter(node, parentNode);
+	    },
             leave: (node: INode, parentNode: INode): any => {
                 this.initializeNodeObfuscators(node, parentNode);
             }

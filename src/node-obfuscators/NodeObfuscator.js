@@ -7,6 +7,8 @@ class NodeObfuscator {
         this.nodes = nodes;
         this.options = options;
     }
+    enterNode(node, parentNode) {
+    }
     replaceNodeIdentifierByNewValue(node, parentNode, namesMap) {
         if (NodeUtils_1.NodeUtils.isIdentifierNode(node) && namesMap.has(node.name)) {
             if ((NodeUtils_1.NodeUtils.isPropertyNode(parentNode) && parentNode.key === node) ||
