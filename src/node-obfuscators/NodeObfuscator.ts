@@ -14,10 +14,17 @@ export abstract class NodeObfuscator implements INodeObfuscator {
     protected nodes: Map <string, ICustomNode>;
 
     /**
-     * @param nodes
+     * @type any
      */
-    constructor(nodes: Map <string, ICustomNode>) {
+    protected options: any;    
+
+    /**
+     * @param nodes
+     * @param options
+     */
+    constructor(nodes: Map <string, ICustomNode>, options: any = {}) {
         this.nodes = nodes;
+        this.options = options;
     }
 
     /**

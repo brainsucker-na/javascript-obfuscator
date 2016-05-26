@@ -3,8 +3,9 @@ const JSFuck_1 = require("../enums/JSFuck");
 const NodeUtils_1 = require("../NodeUtils");
 const Utils_1 = require('../Utils');
 class NodeObfuscator {
-    constructor(nodes) {
+    constructor(nodes, options = {}) {
         this.nodes = nodes;
+        this.options = options;
     }
     replaceNodeIdentifierByNewValue(node, parentNode, namesMap) {
         if (NodeUtils_1.NodeUtils.isIdentifierNode(node) && namesMap.has(node.name)) {

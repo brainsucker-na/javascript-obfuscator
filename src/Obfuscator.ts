@@ -30,9 +30,9 @@ export class Obfuscator {
     private nodes: Map <string, ICustomNode> = new Map <string, ICustomNode> ();
 
     /**
-     * @type {Map<string, new(nodes: Map <string, ICustomNode>)=>INodeObfuscator[]>}
+     * @type {Map<string, (new(nodes: Map <string, ICustomNode>, options: any)=>INodeObfuscator)[]>}
      */
-    private nodeObfuscators: Map <string, (new(nodes: Map <string, ICustomNode>)=>INodeObfuscator)[]> = new Map <string, (new(nodes: Map <string, ICustomNode>)=>INodeObfuscator)[]> ([
+    private nodeObfuscators: Map <string, (new(nodes: Map <string, ICustomNode>, options: any)=>INodeObfuscator)[]> = new Map <string, (new(nodes: Map <string, ICustomNode>, options: any)=>INodeObfuscator)[]> ([
         [NodeType.ArrowFunctionExpression, [FunctionObfuscator]],
         [NodeType.ClassDeclaration, [FunctionDeclarationObfuscator]],
         [NodeType.CatchClause, [CatchClauseObfuscator]],
@@ -124,8 +124,8 @@ export class Obfuscator {
             return;
         }
 
-        this.nodeObfuscators.get(node.type).forEach((obfuscator : new(nodes: Map <string, ICustomNode>)=>INodeObfuscator) => {
-            (new obfuscator(this.nodes)).obfuscateNode(node, parentNode);
+        this.nodeObfuscators.get(node.type).forEach((obfuscator : new(nodes: Map <string, ICustomNode>, options: any)=>INodeObfuscator) => {
+            (new obfuscator(this.nodes, this.options)).obfuscateNode(node, parentNode);
         });
     }
 
