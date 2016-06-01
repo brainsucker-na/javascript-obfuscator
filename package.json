@@ -32,7 +32,8 @@
     "lite": "lite-server",
     "start": "concurrent \"npm run tsc:w\" \"npm run lite\" ",
     "tests": "node tests/dev-test.js",
-    "testr": "node tests/dev-test-require.js"
+    "testr": "node tests/dev-test-require.js",
+    "testb": "node tests/dev-test-browserify.js"
   },
   "author": {
     "name": "sanex3339"
