@@ -13,6 +13,7 @@ const MemberExpressionObfuscator_1 = require('./node-obfuscators/MemberExpressio
 const MethodDefinitionObfuscator_1 = require('./node-obfuscators/MethodDefinitionObfuscator');
 const NodeUtils_1 = require("./NodeUtils");
 const ObjectExpressionObfuscator_1 = require('./node-obfuscators/ObjectExpressionObfuscator');
+const PropertyNodeObfuscator_1 = require('./node-obfuscators/PropertyNodeObfuscator');
 const UnicodeArrayNode_1 = require('./custom-nodes/unicode-array-nodes/UnicodeArrayNode');
 const UnicodeArrayNodesGroup_1 = require('./node-groups/UnicodeArrayNodesGroup');
 const Utils_1 = require('./Utils');
@@ -33,6 +34,7 @@ class Obfuscator {
             [NodeType_1.NodeType.MemberExpression, [MemberExpressionObfuscator_1.MemberExpressionObfuscator]],
             [NodeType_1.NodeType.MethodDefinition, [MethodDefinitionObfuscator_1.MethodDefinitionObfuscator]],
             [NodeType_1.NodeType.ObjectExpression, [ObjectExpressionObfuscator_1.ObjectExpressionObfuscator]],
+            [NodeType_1.NodeType.Property, [PropertyNodeObfuscator_1.PropertyNodeObfuscator]],
             [NodeType_1.NodeType.VariableDeclaration, [VariableDeclarationObfuscator_1.VariableDeclarationObfuscator]],
             [NodeType_1.NodeType.Literal, [LiteralObfuscator_1.LiteralObfuscator]]
         ]);

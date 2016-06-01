@@ -19,6 +19,7 @@ import { MemberExpressionObfuscator } from './node-obfuscators/MemberExpressionO
 import { MethodDefinitionObfuscator } from './node-obfuscators/MethodDefinitionObfuscator';
 import { NodeUtils } from "./NodeUtils";
 import { ObjectExpressionObfuscator } from './node-obfuscators/ObjectExpressionObfuscator';
+import { PropertyNodeObfuscator } from './node-obfuscators/PropertyNodeObfuscator';
 import { UnicodeArrayNode } from './custom-nodes/unicode-array-nodes/UnicodeArrayNode';
 import { UnicodeArrayNodesGroup } from './node-groups/UnicodeArrayNodesGroup';
 import { Utils } from './Utils';
@@ -46,6 +47,7 @@ export class Obfuscator {
         [NodeType.MemberExpression, [MemberExpressionObfuscator]],
         [NodeType.MethodDefinition, [MethodDefinitionObfuscator]],
         [NodeType.ObjectExpression, [ObjectExpressionObfuscator]],
+        [NodeType.Property, [PropertyNodeObfuscator]],
         [NodeType.VariableDeclaration, [VariableDeclarationObfuscator]],
         [NodeType.Literal, [LiteralObfuscator]]
     ]);
