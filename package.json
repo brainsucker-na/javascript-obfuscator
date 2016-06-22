@@ -11,10 +11,14 @@
     "javascript obfuscator",
     "js obfuscator"
   ],
+  "bin": {
+    "javascript-obfuscator": "./bin/javascript-obfuscator"
+  },
   "main": "index.js",
   "dependencies": {
-    "esprima": "^2.7.2",
+    "commander": "^2.9.0",
     "escodegen": "^1.8.0",
+    "esprima": "^2.7.2",
     "estraverse": "^4.2.0",
     "typescript": "^1.8.10"
   },

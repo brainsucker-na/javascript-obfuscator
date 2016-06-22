@@ -1,0 +1,86 @@
+#!/usr/bin/env node
+
+var fs = require('fs');
+var path = require('path');
+var JavaScriptObfuscator = require('../index');
+
+var commands = require('commander');
+
+var packageConfig = fs.readFileSync(path.join(path.dirname(fs.realpathSync(process.argv[1])), '../package.json'));
+var buildVersion = JSON.parse(packageConfig).version;
+
+var isWindows = process.platform == 'win32';
+
+// Specify commander options to parse command line params correctly
+commands
+  .version(buildVersion, '-v, --version')
+  .usage('[options] STDIN STDOUT')
+  .option('--skip-compact', 'Disable code compacting for output in one line.')
+  .option('--debugProtection', 'Disable browser Debug panel (can cause DevTools enabled browser freeze).')
+  .option('--debugProtectionInterval', 'Disable browser Debug panel even after page was loaded (can cause DevTools enabled browser freeze).')
+  .option('--skip-disableConsoleOutput', 'Allow console.log, console.info, console.error and console.warn messages output into browser console.')
+  .option('--skip-rotateUnicodeArray', 'Disable rotation of unicode array values during obfuscation.')
+  .option('--browserified <list>', 'Input is browserified bundle, and list is a comma separated list of sources|browserify indexes to include/exclude from obfuscation.', (val)=>val.split(','))
+  .option('--browserifiedExclude', 'Exclude mode for list for obfuscation of browserified bundle (default is include).')
+  .option('--preserveFunctionCalls <list>', 'Comma separated list of global functions to keep calls (include arguments) unobfuscated (like "require" before browserify).', (val)=>val.split(','))
+;
+
+commands.on('--help', function () {
+  console.log('  Examples:\n');
+  console.log('    %> javascript-obfuscator < in.js > out.js');
+  if (isWindows) {
+    console.log('    %> type in1.js in2.js | cleancss > out.js');
+  } else {
+    console.log('    %> cat in1.js in2.js | cleancss > out.js');
+  }
+  console.log('');
+  process.exit();
+});
+
+commands.parse(process.argv);
+
+// If no sensible data passed in just print help and exit
+var fromStdin = !process.env.__DIRECT__ && !process.stdin.isTTY;
+if (!fromStdin) {
+  commands.outputHelp();
+  return 0;
+}
+
+var encoding = 'utf-8';
+var data;
+
+  data = '';
+  process.stdin.setEncoding(encoding);
+ 
+  process.stdin.on('readable', function() {
+    var chunk;
+    while (chunk = process.stdin.read()) {
+      data += chunk;
+    }
+  });
+ 
+  process.stdin.on('end', function () {
+    processData();
+  });
+ 
+function processData () {
+
+var options = {
+	compact : commands.skipCompact ? false : true,
+	debugProtection : commands.debugProtection,
+	debugProtectionInterval : commands.debugProtectionInterval,
+	disableConsoleOutput : commands.skipDisableConsoleOutput ? false : true,
+	rotateUnicodeArray : commands.skipRotateUnicodeArray ? false : true,
+	browserified : commands.browserified,
+	browserifiedExclude : commands.browserifiedExclude ? true : false,	
+	preserveFunctionCalls : commands.preserveFunctionCalls,
+    };
+
+var obfuscatedCode = JavaScriptObfuscator.JavaScriptObfuscator.obfuscate(
+    data,
+    options
+);
+
+process.stdout.write(obfuscatedCode);
+
+};
