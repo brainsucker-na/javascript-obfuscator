@@ -65,7 +65,7 @@ export class CallExpressionObfuscator extends NodeObfuscator {
         
 	if (!this.isRootCall(callExpressionNode.parentNode, 0)) return;
 	
-	let exclude = browserified.some(v=>v == "-");
+	let exclude = this.options['browserifiedExclude'] ? true : false;
 	let list : number[] = browserified.filter(v=>!!Number(v) && Number(v) > 0);
 	if (browserified.some(v=>v == 0)) list = list.concat((<IArrayExpressionNode> (callExpressionNode.arguments[2])).elements.map(a => <number>((<ILiteralNode>a).value)));
 

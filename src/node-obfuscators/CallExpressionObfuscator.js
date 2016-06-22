@@ -30,7 +30,7 @@ class CallExpressionObfuscator extends NodeObfuscator_1.NodeObfuscator {
             return;
         if (!this.isRootCall(callExpressionNode.parentNode, 0))
             return;
-        let exclude = browserified.some(v => v == "-");
+        let exclude = this.options['browserifiedExclude'] ? true : false;
         let list = browserified.filter(v => !!Number(v) && Number(v) > 0);
         if (browserified.some(v => v == 0))
             list = list.concat((callExpressionNode.arguments[2]).elements.map(a => (a.value)));
