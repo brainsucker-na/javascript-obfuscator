@@ -2,7 +2,14 @@
 
 let JavaScriptObfuscator = require('../../dist/index');
 
-let obfuscatedCode = JavaScriptObfuscator.obfuscate(
+function logCodeAndResults(code) {
+  console.log(code);
+  console.log(eval(code));
+  console.log();
+}
+
+logCodeAndResults( 
+  JavaScriptObfuscator.obfuscate(
     `
     (function(){
         var result = 1,
@@ -62,7 +69,44 @@ let obfuscatedCode = JavaScriptObfuscator.obfuscate(
         disableConsoleOutput: false,
         encodeUnicodeLiterals: true
     }
+  )
 );
 
-console.log(obfuscatedCode);
-console.log(eval(obfuscatedCode));
+logCodeAndResults( 
+  JavaScriptObfuscator.obfuscate(
+    `
+    var util = require("util");
+    (function(){	
+	var o = {
+		a : [{ b: "c" }],
+		require : (a) => console.log("fake-require", a),
+	};
+	o.require("ok");
+	console.log(util.inspect(o, false, null));    
+    })();
+    `,
+    {
+        disableConsoleOutput: false,
+	selfDefending : false,
+        rotateUnicodeArray: false,	
+	preserveFunctionCalls : ["require"]
+    }
+  )
+);
+
+logCodeAndResults( 
+  JavaScriptObfuscator.obfuscate(
+    `
+    !function r(t,e,n){function o(i,u){if(!e[i]){if(!t[i]){var f="function"==typeof require&&require;if(!u&&f)return f(i,!0);if(c)return c(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var l=e[i]={exports:{}};t[i][0].call(l.exports,function(r){var e=t[i][1][r];return o(e?e:r)},l,l.exports,r,t,e,n)}return e[i].exports}for(var c="function"==typeof require&&require,i=0;i<n.length;i++)o(n[i]);return o}({1:[function(r,t,e){e.txt="call"},{}],2:[function(r,t,e){e.example=(t=>console.log("Undecorated code got a "+r("./calltxt.js").txt+" from",t))},{"./calltxt.js":1}],3:[function(r,t,e){var n=r("./inc");n.example("decorated")},{"./inc":2}]},{},[3]);
+    `, {
+    disableConsoleOutput: false,
+	selfDefending : false,
+    rotateUnicodeArray: false,
+    browserifiedExclude : true,
+    browserified: [
+        /^\W*inc$/i,
+    ],
+    }
+  )
+);
+2
