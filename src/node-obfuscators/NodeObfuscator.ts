@@ -35,6 +35,13 @@ export abstract class NodeObfuscator implements INodeObfuscator {
      * @param node
      * @param parentNode
      */
+    public enterNode (node: INode, parentNode?: INode): any {
+    }
+
+    /**
+     * @param node
+     * @param parentNode
+     */
     public abstract obfuscateNode (node: INode, parentNode?: INode): void;
 
     /**

@@ -119,6 +119,21 @@ export class Obfuscator implements IObfuscator {
         });
     };
 
+    /**
+     * @param node
+     * @param parentNode
+     */
+    private initializeNodeEnter (node: INode, parentNode: INode): any {
+        if (!this.nodeObfuscators.has(node.type)) {
+            return;
+        }
+        
+        let result : any = null;
+        this.nodeObfuscators.get(node.type).forEach((obfuscator : TNodeObfuscator) => {
+            result = result || (new obfuscator(this.nodes, this.options)).enterNode(node, parentNode);
+        });
+        return result;
+    }
 
     /**
      * @param node
@@ -139,6 +154,9 @@ export class Obfuscator implements IObfuscator {
      */
     private obfuscate (node: INode): void {
         estraverse.replace(node, {
+            enter: (node: INode, parentNode: INode): any => {
+                return this.initializeNodeEnter(node, parentNode);
+            },
             leave: (node: INode, parentNode: INode): any => {
                 this.initializeNodeObfuscators(node, parentNode);
             }
