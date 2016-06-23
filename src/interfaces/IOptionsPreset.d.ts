@@ -10,5 +10,8 @@ export interface IOptionsPreset {
     unicodeArray?: boolean;
     unicodeArrayThreshold?: number;
     wrapUnicodeArrayCalls?: boolean;
+    browserified?: string[];	
+    browserifiedExclude?: boolean;	
+    preserveFunctionCalls?: string[];
     [key: string]: any;
 }

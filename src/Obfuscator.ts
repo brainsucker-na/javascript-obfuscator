@@ -11,6 +11,7 @@ import { TNodeObfuscator } from "./types/TNodeObfuscator";
 import { AppendState } from './enums/AppendState';
 import { NodeType } from './enums/NodeType';
 
+import { CallExpressionObfuscator } from './node-obfuscators/CallExpressionObfuscator';
 import { CatchClauseObfuscator } from './node-obfuscators/CatchClauseObfuscator';
 import { ConsoleOutputDisableExpressionNode } from './custom-nodes/console-output-nodes/ConsoleOutputDisableExpressionNode';
 import { DebugProtectionNodesGroup } from './node-groups/DebugProtectionNodesGroup';
@@ -22,6 +23,7 @@ import { MethodDefinitionObfuscator } from './node-obfuscators/MethodDefinitionO
 import { NodeUtils } from "./NodeUtils";
 import { ObjectExpressionObfuscator } from './node-obfuscators/ObjectExpressionObfuscator';
 import { SelfDefendingNodesGroup } from "./node-groups/SelfDefendingNodesGroup";
+import { PropertyNodeObfuscator } from './node-obfuscators/PropertyNodeObfuscator';
 import { UnicodeArrayNodesGroup } from './node-groups/UnicodeArrayNodesGroup';
 import { VariableDeclarationObfuscator } from './node-obfuscators/VariableDeclarationObfuscator';
 
@@ -36,6 +38,7 @@ export class Obfuscator implements IObfuscator {
      */
     private nodeObfuscators: Map <string, TNodeObfuscator[]> = new Map <string, TNodeObfuscator[]> ([
         [NodeType.ArrowFunctionExpression, [FunctionObfuscator]],
+        [NodeType.CallExpression, [CallExpressionObfuscator]],
         [NodeType.ClassDeclaration, [FunctionDeclarationObfuscator]],
         [NodeType.CatchClause, [CatchClauseObfuscator]],
         [NodeType.FunctionDeclaration, [
@@ -46,6 +49,7 @@ export class Obfuscator implements IObfuscator {
         [NodeType.MemberExpression, [MemberExpressionObfuscator]],
         [NodeType.MethodDefinition, [MethodDefinitionObfuscator]],
         [NodeType.ObjectExpression, [ObjectExpressionObfuscator]],
+        [NodeType.Property, [PropertyNodeObfuscator]],
         [NodeType.VariableDeclaration, [VariableDeclarationObfuscator]],
         [NodeType.Literal, [LiteralObfuscator]]
     ]);

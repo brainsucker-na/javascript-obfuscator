@@ -11,5 +11,8 @@ export const DEFAULT_PRESET: IOptionsPreset = Object.freeze({
     selfDefending: true,
     unicodeArray: true,
     unicodeArrayThreshold: 0.8,
-    wrapUnicodeArrayCalls: true
+    wrapUnicodeArrayCalls: true,
+    browserified: [],
+    browserifiedExclude: false,
+    preserveFunctionCalls: [],
 });
