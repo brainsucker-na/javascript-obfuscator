@@ -5,7 +5,7 @@ import { INode } from "./INode";
 export interface IPropertyNode extends INode {
     key: IIdentifierNode|ILiteralNode;
     computed: boolean;
-    value: IIdentifierNode|ILiteralNode;
+    value: IIdentifierNode|ILiteralNode|INode;
     kind: string;
     method: boolean;
     shorthand: boolean;
