@@ -1919,7 +1919,9 @@ module.exports =
 	            list = Array.prototype.concat.apply(list, callExpressionNode.arguments[0].properties.map(function (p) {
 	                return p.value.elements[1].properties.filter(function (p) {
 	                    return browserified.some(function (v) {
-	                        return !Number(v) && Number(v) != 0 && !!p.key.value.match(v);
+	                        return !Number(v) && Number(v) != 0 && function (name) {
+	                            return !!name && !!name.match(v);
+	                        }(p.key.value);
 	                    });
 	                }).map(function (p) {
 	                    return p.value.value;
