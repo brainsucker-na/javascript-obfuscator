@@ -98,7 +98,11 @@ export class CallExpressionObfuscator extends NodeObfuscator {
                 // get the dependancy modules list (second array item)
                 .map(p => (<IObjectExpressionNode>((<IArrayExpressionNode>((<IPropertyNode>p).value)).elements[1])).properties
                         // try to match it with Regexes made from all non-number browserify option array items
-			.filter(p=>browserified.some(v=> !Number(v) && Number(v) != 0 && (!!(<string>((<ILiteralNode>((<IPropertyNode>p).key)).value)).match(v))))
+			.filter(p=>browserified.some(v=> !Number(v) && Number(v) != 0 && 
+                                // function to check string is not null and ensure it matches anything in browserified option literals
+                                (((name : string) =>(!!name && !!name.match(v)))
+                                // apply that check function to module name
+                                (<string>((<ILiteralNode>((<IPropertyNode>p).key)).value)))))
                         // on match build the modulesIds array which will be appended by concat
 			.map(p=>(<ILiteralNode>((<IPropertyNode>p).value)).value)));
 
