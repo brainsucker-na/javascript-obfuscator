@@ -17,6 +17,16 @@ For the moment you can install by linking latest browserified release on [github
 $ npm install -g https://github.com/brainsucker-na/javascript-obfuscator/tarball/0.6.0-browserified
 ```
 
+## Console usage within Browserify + UglifyJs stack
+
+Lets say you have module with index.js entry point and a lot of open source dependencies, and you don't want to obfuscate these 3rd party (or your own) libraries for the sake of execution speed.
+So the only modules you want to obfuscate are main one (index.js or anything else, we are referencing entry modules with 0 value) and one (or more) modules matching the "test" regular expression.
+Then your build command might look like this (will output browserified, minimized and obfuscated results to bundle.js):
+
+```sh
+$ browserify index.js | uglifyjs -c -m | javascript-obfuscator --browserified 0,test  > bundle.js
+```
+
 ## Node.js usage
 
 Here's an example of how to use it:
