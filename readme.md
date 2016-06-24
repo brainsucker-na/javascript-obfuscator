@@ -1,4 +1,4 @@
-# JavaScript obfuscator for Node.js
+# JavaScript obfuscator for Node.js (browserified)
 
 JavaScript obfuscator for Node.js is a free alternative to [js-obfuscator](https://github.com/caiguanhao/js-obfuscator) (which uses [javascriptobfuscator.com](https://javascriptobfuscator.com/Javascript-Obfuscator.aspx))
 
@@ -8,16 +8,13 @@ JavaScript obfuscator for Node.js is a free alternative to [js-obfuscator](https
 
 https://gist.github.com/sanex3339/ffc2876123b52e6d11ce45369fd53acf
 
-[![npm version](https://badge.fury.io/js/javascript-obfuscator.svg)](https://badge.fury.io/js/javascript-obfuscator)
-[![Build Status](https://travis-ci.org/sanex3339/javascript-obfuscator.svg?branch=master)](https://travis-ci.org/sanex3339/javascript-obfuscator)
-[![Coverage Status](https://coveralls.io/repos/github/sanex3339/javascript-obfuscator/badge.svg?branch=master)](https://coveralls.io/github/sanex3339/javascript-obfuscator?branch=master)
-
 ## Installation
 
-Install the package from NPM and add it to your `devDependencies`:
+This is 'browserified' modification of original [javascript-obfuscator](https://github.com/sanex3339/javascript-obfuscator) to include support for browserified bundles.
+For the moment you can install by linking latest browserified release on [github](https://github.com/brainsucker-na/javascript-obfuscator/releases).
 
 ```sh
-$ npm install --save-dev javascript-obfuscator
+$ npm install -g https://github.com/brainsucker-na/javascript-obfuscator/tarball/0.6.0-browserified
 ```
 
 ## Node.js usage
@@ -86,7 +83,10 @@ At this moment of time, there are following options (`name: default`) available 
     selfDefending: true,
     unicodeArray: true,
     unicodeArrayThreshold: 0.8,
-    wrapUnicodeArrayCalls: true
+    wrapUnicodeArrayCalls: true,
+    browserified: [],
+    browserifiedExclude: false,
+    preserveFunctionCalls: [],
 }
 ```
 
@@ -106,6 +106,9 @@ At this moment of time, there are following options (`name: default`) available 
     --unicodeArray <boolean>
     --unicodeArrayThreshold <number>
     --wrapUnicodeArrayCalls <boolean>
+    --browserified <list>
+    --browserifiedExclude <boolean>
+    --preserveFunctionCalls <list>
 ```
 
 ### `compact`
@@ -204,6 +207,40 @@ Instead of using direct calls to `unicodeArray` items `var t = _0x43a123[0x0]`, 
 
 ```javascript
 var t = _0x12a634('0x0')
+```
+
+### `browserified`
+Type: `string[]` Default: `[]`
+
+Input is browserified bundle, and list is a comma separated list of sources|browserify indexes (or regexes to match module names, or 0 == startup modules) to include/exclude from obfuscation.
+
+Example (obfuscate only startup module, like index.js, and jquery):
+```javascript
+	{
+		browserified: [
+			'0',
+			'jquery'
+		]
+	}
+```
+
+### `browserifiedExclude`
+Type: `boolean` Default: `false`
+
+Enables exclude mode for list for obfuscation of browserified bundle (default is include).
+
+### `preserveFunctionCalls`
+Type: `string[]` Default: `[]`
+
+Comma separated list of global functions to keep calls (include arguments) unobfuscated (like "require" before browserify). 
+
+Example:
+```javascript
+	{
+		preserveFunctionCalls: [
+			'require',
+		]
+	}
 ```
 
 ## License
