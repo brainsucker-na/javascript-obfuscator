@@ -16,7 +16,10 @@ var commands = require('commander'),
         selfDefending: true,
         unicodeArray: true,
         unicodeArrayThreshold: 0.8,
-        wrapUnicodeArrayCalls: true
+        wrapUnicodeArrayCalls: true,
+        browserified: [],
+        browserifiedExclude: false,
+        preserveFunctionCalls: [],
     };
 
 configureProcess();
@@ -58,6 +61,9 @@ function configureCommands () {
         .option('--unicodeArray <boolean>', 'Disables gathering of all literal strings into an array and replacing every literal string with an array call', parseBoolean)
         .option('--unicodeArrayThreshold <number>', 'The probability that the literal string will be inserted into unicodeArray (Default: 0.8, Min: 0, Max: 1)', parseFloat)
         .option('--wrapUnicodeArrayCalls <boolean>', 'Disables usage of special access function instead of direct array call', parseBoolean)
+        .option('--browserified <list>', 'Input is browserified bundle, and list is a comma separated list of sources|browserify indexes (or regexes to match module names, or 0 == startup modules) to include/exclude from obfuscation.', (val)=>val.split(','))
+        .option('--browserifiedExclude <boolean>', 'Exclude mode for list for obfuscation of browserified bundle (default is include).', parseBoolean)
+        .option('--preserveFunctionCalls <list>', 'Comma separated list of global functions to keep calls (include arguments) unobfuscated (like "require" before browserify).', (val)=>val.split(','))
         .parse(process.argv);
 
     commands.on('--help', function () {
